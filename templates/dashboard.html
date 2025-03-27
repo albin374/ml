@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Model Performance Summary</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Model</th>
+                    <th>Accuracy/R² Score</th>
+                    <th>Last Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Simple Linear Regression</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="progress flex-grow-1 me-2" style="height: 20px;">
+                                <div class="progress-bar bg-primary" role="progressbar" 
+                                     style="width: {{ (slr_r2 * 100)|abs if slr_r2 else 0 }}%">
+                                    {{ "%.1f"|format(slr_r2 * 100) }}%
+                                </div>
+                            </div>
+                            <span class="text-muted">R²</span>
+                        </div>
+                    </td>
+                    <td>{{ slr_date }}</td>
+                    <td><a href="/slr" class="btn btn-sm btn-outline-primary">View</a></td>
+                </tr>
+                <tr>
+                    <td>Multiple Linear Regression</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="progress flex-grow-1 me-2" style="height: 20px;">
+                                <div class="progress-bar bg-primary" role="progressbar" 
+                                     style="width: {{ (mlr_r2 * 100)|abs if mlr_r2 else 0 }}%">
+                                    {{ "%.1f"|format(mlr_r2 * 100) }}%
+                                </div>
+                            </div>
+                            <span class="text-muted">R²</span>
+                        </div>
+                    </td>
+                    <td>{{ mlr_date }}</td>
+                    <td><a href="/mlr" class="btn btn-sm btn-outline-primary">View</a></td>
+                </tr>
+                <tr>
+                    <td>Logistic Regression</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="progress flex-grow-1 me-2" style="height: 20px;">
+                                <div class="progress-bar bg-success" role="progressbar" 
+                                     style="width: {{ (lr_accuracy * 100) if lr_accuracy else 0 }}%">
+                                    {{ "%.1f"|format(lr_accuracy * 100) }}%
+                                </div>
+                            </div>
+                            <span class="text-muted">Acc</span>
+                        </div>
+                    </td>
+                    <td>{{ lr_date }}</td>
+                    <td><a href="/lr" class="btn btn-sm btn-outline-primary">View</a></td>
+                </tr>
+                <tr>
+                    <td>Polynomial Regression</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="progress flex-grow-1 me-2" style="height: 20px;">
+                                <div class="progress-bar bg-primary" role="progressbar" 
+                                     style="width: {{ (pr_r2 * 100)|abs if pr_r2 else 0 }}%">
+                                    {{ "%.1f"|format(pr_r2 * 100) }}%
+                                </div>
+                            </div>
+                            <span class="text-muted">R²</span>
+                        </div>
+                    </td>
+                    <td>{{ pr_date }}</td>
+                    <td><a href="/pr" class="btn btn-sm btn-outline-primary">View</a></td>
+                </tr>
+                <tr>
+                    <td>K-Nearest Neighbors</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="progress flex-grow-1 me-2" style="height: 20px;">
+                                <div class="progress-bar bg-success" role="progressbar" 
+                                     style="width: {{ (knn_accuracy * 100) if knn_accuracy else 0 }}%">
+                                    {{ "%.1f"|format(knn_accuracy * 100) }}%
+                                </div>
+                            </div>
+                            <span class="text-muted">Acc</span>
+                        </div>
+                    </td>
+                    <td>{{ knn_date }}</td>
+                    <td><a href="/knn" class="btn btn-sm btn-outline-primary">View</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="mt-4">
+        <div class="alert alert-info">
+            <h5 class="alert-heading">Metric Information</h5>
+            <p class="mb-0">
+                <strong>R² Score:</strong> Indicates how well the regression models fit the data. Values range from -∞ to 1, where 1 indicates perfect prediction.<br>
+                <strong>Accuracy:</strong> For classification models (Logistic Regression and KNN), shows the percentage of correct predictions.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %} 

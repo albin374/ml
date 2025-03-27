@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Cricket Score Prediction Models</h2>
+    
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <!-- Simple Linear Regression -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Simple Linear Regression</h5>
+                    <p class="card-text">Predict runs based on toss decision</p>
+                    <p class="card-text"><small class="text-muted">R² Score: {{ "%.1f"|format(slr_r2 * 100) }}%</small></p>
+                    <a href="/slr" class="btn btn-primary">Make Prediction</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Multiple Linear Regression -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Multiple Linear Regression</h5>
+                    <p class="card-text">Predict runs using win margin and toss decision</p>
+                    <p class="card-text"><small class="text-muted">R² Score: {{ "%.1f"|format(mlr_r2 * 100) }}%</small></p>
+                    <a href="/mlr" class="btn btn-primary">Make Prediction</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Logistic Regression -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Logistic Regression</h5>
+                    <p class="card-text">Classify win margin as high/low based on venue</p>
+                    <p class="card-text"><small class="text-muted">Accuracy: {{ "%.1f"|format(lr_accuracy * 100) }}%</small></p>
+                    <a href="/lr" class="btn btn-primary">Make Prediction</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Polynomial Regression -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Polynomial Regression</h5>
+                    <p class="card-text">Predict runs based on innings with nonlinear relationship</p>
+                    <p class="card-text"><small class="text-muted">R² Score: {{ "%.1f"|format(pr_r2 * 100) }}%</small></p>
+                    <a href="/pr" class="btn btn-primary">Make Prediction</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- K-Nearest Neighbors -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">K-Nearest Neighbors</h5>
+                    <p class="card-text">Classify matches as high/low scoring</p>
+                    <p class="card-text"><small class="text-muted">Accuracy: {{ "%.1f"|format(knn_accuracy * 100) }}%</small></p>
+                    <a href="/knn" class="btn btn-primary">Make Prediction</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

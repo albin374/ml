@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Cricket Runs Prediction (Simple Linear Regression)</h3>
+                    <p class="card-subtitle mb-2 text-muted">Predict Runs Based on Toss Decision</p>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="toss_decision" class="form-label">Toss Decision</label>
+                            <select class="form-select" id="toss_decision" name="toss_decision" required>
+                                <option value="">Select toss decision</option>
+                                <option value="1">Bat</option>
+                                <option value="0">Field</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Predict Runs</button>
+                    </form>
+
+                    {% if error %}
+                    <div class="mt-4">
+                        <div class="alert alert-danger">
+                            {{ error }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if prediction is not none %}
+                    <div class="mt-4">
+                        <h4>Prediction Result</h4>
+                        <div class="alert alert-info">
+                            Predicted Runs: {{ "%.0f"|format(prediction) }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="mt-3">
+                <a href="/" class="btn btn-secondary">Back to Model Selection</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

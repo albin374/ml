@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">K-Nearest Neighbors Prediction</h3>
+                    <p class="card-subtitle mb-2 text-muted">Accuracy: {{ "%.1f"|format(knn_accuracy * 100) }}%</p>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="venue" class="form-label">Venue</label>
+                            <select class="form-select" id="venue" name="venue" required>
+                                <option value="">Select venue</option>
+                                <option value="0">Dubai International Cricket Stadium</option>
+                                <option value="1">Sheikh Zayed Stadium</option>
+                                <option value="2">Sharjah Cricket Stadium</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="toss_decision" class="form-label">Toss Decision</label>
+                            <select class="form-select" id="toss_decision" name="toss_decision" required>
+                                <option value="">Select toss decision</option>
+                                <option value="1">Bat</option>
+                                <option value="0">Field</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Predict Match Category</button>
+                    </form>
+
+                    {% if prediction is not none %}
+                    <div class="mt-4">
+                        <h4>Prediction Result</h4>
+                        <div class="alert alert-info">
+                            Match Category: {{ "High Scoring" if prediction == 1 else "Low Scoring" }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="mt-3">
+                <a href="/" class="btn btn-secondary">Back to Model Selection</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

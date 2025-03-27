@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Win Margin Prediction (Logistic Regression)</h2>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Predict High/Low Win Margin</h5>
+                    <form id="predictionForm" onsubmit="makePrediction(event)">
+                        <div class="mb-3">
+                            <label for="venue" class="form-label">Venue</label>
+                            <input type="text" class="form-control" id="venue" name="venue" required>
+                            <div class="form-text">Enter the cricket venue name</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="win_margin" class="form-label">Win Margin</label>
+                            <input type="number" class="form-control" id="win_margin" name="win_margin" required min="0" step="1">
+                            <div class="form-text">Enter the win margin (runs)</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Predict</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div id="results" style="display: none;">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Prediction Results</h5>
+                        <div class="alert" id="predictionAlert" role="alert"></div>
+                        <p><strong>Confidence:</strong> <span id="confidence"></span></p>
+                        <p><strong>Win Margin Threshold:</strong> <span id="threshold"></span></p>
+                        <div class="mt-3">
+                            <h6>Feature Importance</h6>
+                            <div id="featureImportance"></div>
+                        </div>
+                        <div class="mt-3">
+                            <img id="resultPlot" src="" alt="Logistic Regression Results" style="max-width: 100%; display: none;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="error" class="alert alert-danger" style="display: none;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+function makePrediction(event) {
+    event.preventDefault();
+    
+    // Hide previous results and errors
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('error').style.display = 'none';
+    document.getElementById('resultPlot').style.display = 'none';
+    
+    // Get form data
+    const formData = new FormData(event.target);
+    
+    // Make prediction request
+    fetch('/predict_lr', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        // Show results
+        document.getElementById('results').style.display = 'block';
+        
+        // Update prediction alert
+        const alert = document.getElementById('predictionAlert');
+        alert.className = 'alert ' + (data.prediction === 'High' ? 'alert-success' : 'alert-warning');
+        alert.textContent = `Predicted Win Margin: ${data.prediction}`;
+        
+        // Update other details
+        document.getElementById('confidence').textContent = 
+            `${(data.confidence * 100).toFixed(1)}%`;
+        document.getElementById('threshold').textContent = 
+            `${data.win_margin_threshold.toFixed(1)} runs`;
+            
+        // Update feature importance
+        const featureImportance = document.getElementById('featureImportance');
+        featureImportance.innerHTML = Object.entries(data.feature_importance)
+            .map(([feature, importance]) => 
+                `<div class="mb-2">
+                    <strong>${feature}:</strong>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: ${(importance * 100).toFixed(1)}%">
+                            ${(importance * 100).toFixed(1)}%
+                        </div>
+                    </div>
+                </div>`
+            ).join('');
+        
+        // Show plot
+        const plot = document.getElementById('resultPlot');
+        plot.src = '/static/lr_results.png?' + new Date().getTime();  // Cache busting
+        plot.style.display = 'block';
+    })
+    .catch(error => {
+        document.getElementById('error').textContent = error.message;
+        document.getElementById('error').style.display = 'block';
+    });
+}
+</script>
+{% endblock %} 
